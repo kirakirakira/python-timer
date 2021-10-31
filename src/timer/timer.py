@@ -1,3 +1,6 @@
+import time
+
+
 class Timer(object):
     _STOPPED = 'STOPPED'
     _RUNNING = 'RUNNING'
@@ -11,8 +14,9 @@ class Timer(object):
         return self._status
 
     def start(self):
-        self._start_time = 0
+        self._start_time = time.monotonic()
     
     @property
     def remaining_ticks(self):
-        return self._interval - self._start_time
+        elapsed_time = time.monotonic() - self._start_time
+        return self._interval - elapsed_time
