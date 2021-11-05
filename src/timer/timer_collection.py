@@ -25,3 +25,8 @@ class TimerCollection(object):
 
     def start_timer(self, interval, fn):
         return self.add_timer(interval, fn)
+
+    def run(self):
+        for timer in self.timers:
+            if timer.remaining_ticks == 0:
+                timer._fn()

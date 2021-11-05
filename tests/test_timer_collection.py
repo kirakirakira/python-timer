@@ -27,5 +27,19 @@ class TestTimerCollection(unittest.TestCase):
         timey.elapse(1)
         self.assertEqual(timer.remaining_ticks, 4)
 
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_run_to_complete(self):
+        called_back = [False]
+
+        def callback():
+            called_back[0] = True
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], True)
+
 if __name__ == '__main__':
     unittest.main()
