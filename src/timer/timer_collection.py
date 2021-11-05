@@ -5,14 +5,14 @@ class TimerCollection(object):
 
     class Timer(object):
         def __init__(self, interval, fn):
-            self.interval = interval
+            self._start_time = time.monotonic()
+            self._interval = interval
             self._fn = fn
 
         @property
         def remaining_ticks(self):
-            # elapsed_timer = time.monotonic() - self._start_time
-            # return self._interval - elapsed_time
-            return self.interval
+            elapsed_time = time.monotonic() - self._start_time
+            return self._interval - elapsed_time
 
     def __init__(self) -> None:
         super().__init__()
