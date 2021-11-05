@@ -9,13 +9,14 @@ class TestTimerCollection(unittest.TestCase):
     def test_init(self):
         new_timer_collection = TimerCollection()
 
-    # def test_add_timer(self):
-    #     new_timer_collection = TimerCollection()
-    #     new_timer_collection.add_timer(5, lambda: True)
-
     def test_start_timer(self):
         new_timer_collection = TimerCollection()
         new_timer_collection.start_timer(5, lambda: True)
+
+    def test_remaining_ticks(self):
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_timer(5, lambda: True)
+        self.assertEqual(timer.remaining_ticks, 5)
 
 if __name__ == '__main__':
     unittest.main()

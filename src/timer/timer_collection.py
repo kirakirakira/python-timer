@@ -8,12 +8,20 @@ class TimerCollection(object):
             self.interval = interval
             self._fn = fn
 
+        @property
+        def remaining_ticks(self):
+            # elapsed_timer = time.monotonic() - self._start_time
+            # return self._interval - elapsed_time
+            return self.interval
+
     def __init__(self) -> None:
         super().__init__()
         self.timers = []
 
     def add_timer(self, interval, fn):
-        self.timers.append(self.Timer(interval, fn))
+        timer = self.Timer(interval, fn)
+        self.timers.append(timer)
+        return timer
 
     def start_timer(self, interval, fn):
-        self.add_timer(interval, fn)
+        return self.add_timer(interval, fn)
