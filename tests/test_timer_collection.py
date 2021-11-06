@@ -62,9 +62,10 @@ class TestTimerCollection(unittest.TestCase):
         self.assertEqual(timer_a.remaining_ticks, 3)
         self.assertEqual(timer_b.remaining_ticks, 3)
 
+        timey.elapse(3)
         new_timer_collection.run()
         self.assertEqual(called_back_a[0], True)
-
+        self.assertEqual(called_back_b[0], True)
 
 
 if __name__ == '__main__':
