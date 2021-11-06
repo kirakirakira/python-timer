@@ -1,4 +1,5 @@
 import time
+import sys
 
 
 class TimerCollection(object):
@@ -54,4 +55,4 @@ class TimerCollection(object):
         for timer in timers_to_remove:
             self.timers.remove(timer)
 
-        return next_ready
+        return next_ready if next_ready != float('inf') else None
