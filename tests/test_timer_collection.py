@@ -161,6 +161,36 @@ class TestTimerCollection(unittest.TestCase):
         new_timer_collection.run()
         self.assertEqual(called_back[0], 3)
 
+    # @mock.patch('time.monotonic', timey.current_time)
+    # def test_run_return_time_until_next_timer_is_due(self):
+    #     called_back_a = [0]
+
+    #     def callback_a():
+    #         called_back_a[0] += 1
+
+    #     called_back_b = [0]
+
+    #     def callback_b():
+    #         called_back_b[0] += 1
+
+    #     new_timer_collection = TimerCollection()
+    #     timer_a = new_timer_collection.start_timer(6, callback_a)
+    #     self.assertEqual(timer_a.remaining_ticks, 6)
+    #     timey.elapse(2)
+
+    #     timer_b = new_timer_collection.start_timer(3, callback_b)
+    #     self.assertEqual(timer_a.remaining_ticks, 4)
+    #     self.assertEqual(timer_b.remaining_ticks, 3)
+
+    #     timey.elapse(3)
+    #     time_until_next = new_timer_collection.run()
+    #     self.assertEqual(called_back_b[0], 1)
+    #     self.assertEqual(time_until_next, 1)
+
+    #     timey.elapse(1)
+    #     time_until_next = new_timer_collection.run()
+    #     self.assertEqual(called_back_a[0], 1)
+    #     # self.assertEqual(time_until_next, 0)
 
 if __name__ == '__main__':
     unittest.main()

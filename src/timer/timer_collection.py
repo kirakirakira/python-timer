@@ -37,6 +37,8 @@ class TimerCollection(object):
                 timer._fn()
                 if not timer._periodic:
                     timers_to_remove.append(timer)
+                else:
+                    timer._start_time = time.monotonic()
         
         for timer in timers_to_remove:
             self.timers.remove(timer)
