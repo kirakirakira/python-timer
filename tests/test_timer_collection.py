@@ -138,6 +138,29 @@ class TestTimerCollection(unittest.TestCase):
         self.assertEqual(called_back_a[0], 1)
         self.assertEqual(called_back_b[0], 1)
 
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_periodic_timer(self):
+        called_back = [0]
+
+        def callback():
+            called_back[0] += 1
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_periodic_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 1)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 2)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 3)
+
 
 if __name__ == '__main__':
     unittest.main()
