@@ -18,6 +18,7 @@ class TimerCollection(object):
 
     def __init__(self):
         self.timers = []
+        self.last_ticks = time.monotonic()
 
     def _add_timer(self, interval, fn, periodic = False):
         timer = self.Timer(interval, fn, periodic)
@@ -32,13 +33,25 @@ class TimerCollection(object):
 
     def run(self):
         timers_to_remove = []
+
+        next_ready = float('inf')
+        did_one = False
+
         for timer in self.timers:
-            if timer.remaining_ticks == 0:
+            if not did_one and timer.remaining_ticks == 0:
+                did_one = True
+
                 timer._fn()
+
                 if not timer._periodic:
                     timers_to_remove.append(timer)
                 else:
                     timer._start_time = time.monotonic()
-        
+                    next_ready = min(next_ready, timer.remaining_ticks)
+            else:
+                next_ready = min(next_ready, timer.remaining_ticks)
+
         for timer in timers_to_remove:
             self.timers.remove(timer)
+
+        return next_ready
