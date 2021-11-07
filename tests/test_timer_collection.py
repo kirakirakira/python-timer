@@ -221,6 +221,7 @@ class TestTimerCollection(unittest.TestCase):
         time_until_next = new_timer_collection.run()
         self.assertEqual(called_back[0], 3)
 
+    # TODO Stop timer
 
 if __name__ == '__main__':
     unittest.main()
