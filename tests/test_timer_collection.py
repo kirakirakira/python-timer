@@ -191,10 +191,10 @@ class TestTimerCollection(unittest.TestCase):
         timey.elapse(1)
         time_until_next = new_timer_collection.run()
         self.assertEqual(called_back_a[0], 1)
-        self.assertEqual(time_until_next, float('inf'))
+        self.assertEqual(time_until_next, None)
 
     @mock.patch('time.monotonic', timey.current_time)
-    def test_run_return_time_until_next_timer_is_due_periodic_tiner(self):
+    def test_run_return_time_until_next_timer_is_due_periodic_timer(self):
         called_back = [0]
 
         def callback():
@@ -206,6 +206,20 @@ class TestTimerCollection(unittest.TestCase):
         timey.elapse(5)
         time_until_next = new_timer_collection.run()
         self.assertEqual(time_until_next, 5)
+
+    # @mock.patch('time.monotonic', timey.current_time)
+    # def test_pass_arguments_to_callback(self):
+    #     called_back = [0]
+
+    #     def callback(incrementer):
+    #         called_back[0] += incrementer
+
+    #     new_timer_collection = TimerCollection()
+    #     timer = new_timer_collection.start_periodic_timer(5, callback(3))
+
+    #     timey.elapse(5)
+    #     time_until_next = new_timer_collection.run()
+    #     self.assertEqual(called_back[0], 3)
 
 
 if __name__ == '__main__':
