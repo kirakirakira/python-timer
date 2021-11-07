@@ -207,19 +207,19 @@ class TestTimerCollection(unittest.TestCase):
         time_until_next = new_timer_collection.run()
         self.assertEqual(time_until_next, 5)
 
-    # @mock.patch('time.monotonic', timey.current_time)
-    # def test_pass_arguments_to_callback(self):
-    #     called_back = [0]
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_pass_arguments_to_callback(self):
+        called_back = [0]
 
-    #     def callback(incrementer):
-    #         called_back[0] += incrementer
+        def callback(incrementer):
+            called_back[0] += incrementer
 
-    #     new_timer_collection = TimerCollection()
-    #     timer = new_timer_collection.start_periodic_timer(5, callback(3))
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_periodic_timer(5, callback, 3)
 
-    #     timey.elapse(5)
-    #     time_until_next = new_timer_collection.run()
-    #     self.assertEqual(called_back[0], 3)
+        timey.elapse(5)
+        time_until_next = new_timer_collection.run()
+        self.assertEqual(called_back[0], 3)
 
 
 if __name__ == '__main__':

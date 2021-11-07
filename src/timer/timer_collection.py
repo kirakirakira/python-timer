@@ -5,10 +5,11 @@ import sys
 class TimerCollection(object):
 
     class Timer(object):
-        def __init__(self, interval, fn, periodic = False):
+        def __init__(self, interval, fn, argument = None, periodic = False):
             self._start_time = time.monotonic()
             self._interval = interval
             self._fn = fn
+            self._argument = argument
             self._periodic = periodic
 
         @property
@@ -21,16 +22,16 @@ class TimerCollection(object):
         self.timers = []
         self.last_ticks = time.monotonic()
 
-    def _add_timer(self, interval, fn, periodic = False):
-        timer = self.Timer(interval, fn, periodic)
+    def _add_timer(self, interval, fn, argument = None, periodic = False):
+        timer = self.Timer(interval, fn, argument, periodic)
         self.timers.append(timer)
         return timer
 
-    def start_timer(self, interval, fn):
-        return self._add_timer(interval, fn)
+    def start_timer(self, interval, fn, argument = None):
+        return self._add_timer(interval, fn, argument)
 
-    def start_periodic_timer(self, interval, fn):
-        return self._add_timer(interval, fn, periodic = True)
+    def start_periodic_timer(self, interval, fn, argument = None):
+        return self._add_timer(interval, fn, argument, periodic = True)
 
     def run(self):
         timers_to_remove = []
@@ -42,7 +43,10 @@ class TimerCollection(object):
             if not did_one and timer.remaining_ticks == 0:
                 did_one = True
 
-                timer._fn()
+                if timer._argument != None:
+                    timer._fn(timer._argument)
+                else:
+                    timer._fn()
 
                 if not timer._periodic:
                     timers_to_remove.append(timer)
