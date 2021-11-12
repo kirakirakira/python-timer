@@ -25,12 +25,17 @@ def red_led_callback():
 def button_callback():
     if cp.button_a:
         multiplier = steps[0] // 10
-        light_up_pixels(multiplier)
+        if multiplier <= 10:
+            light_up_pixels(multiplier)
     else:
         clear_all_pixels()
 
 def step_counter():
-    steps[0] += 1
+    print("{}, {}, {}".format(cp.acceleration.x, cp.acceleration.y, cp.acceleration.z), end="\n")
+
+    if (cp.acceleration.x < 2 and cp.acceleration.y > 9) or (cp.acceleration.x > 0 and cp.acceleration.y < 0):
+        steps[0] += 1
+    
     print(steps[0])
 
 clear_all_pixels()
