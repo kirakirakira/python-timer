@@ -34,6 +34,7 @@ class TimerCollection(object):
         return self._add_timer(interval, fn, argument, periodic = True)
 
     def stop(self, timer):
+        print(self.timers)
         self.timers.remove(timer)
 
     def run(self):

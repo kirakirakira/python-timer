@@ -10,6 +10,8 @@ difference = {"delta x": 0, "delta y": 0, "delta z": 0}
 
 timer_collection = TimerCollection()
 
+acceleration_monitor_timer = [None]
+
 def blink_led():
     cp.red_led = not cp.red_led
 
@@ -29,20 +31,21 @@ def print_acceleration():
 
     if difference["delta x"] < 0.5 and difference["delta y"] < 0.5 and difference["delta z"] < 0.5:
         print("YOU ARE THE BESTEST **********")
-        timer_collection.stop(acceleration_monitor_timer)
+        print(acceleration_monitor_timer[0])
+        timer_collection.stop(acceleration_monitor_timer[0])
         timer_collection.start_timer(5, youre_done)
     previous_acceleration["x"] = acceleration["x"]
     previous_acceleration["y"] = acceleration["y"]
     previous_acceleration["z"] = acceleration["z"]
 
 blink_led_timer = timer_collection.start_periodic_timer(0.2, blink_led)
-acceleration_monitor_timer = timer_collection.start_periodic_timer(2, print_acceleration)
+acceleration_monitor_timer[0] = timer_collection.start_periodic_timer(2, print_acceleration)
 
 while True:
     time_until_next = timer_collection.run()
 
     if cp.button_a:
-        acceleration_monitor_timer = timer_collection.start_periodic_timer(2, print_acceleration)
+        acceleration_monitor_timer[0] = timer_collection.start_periodic_timer(2, print_acceleration)
 
     if time_until_next != None:
         time.sleep(time_until_next)
