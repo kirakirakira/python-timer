@@ -14,6 +14,7 @@ def blink_led():
     cp.red_led = not cp.red_led
 
 def youre_done():
+    cp.play_file("short-alarm.wav")
     print("YOU ARE DONE 1347183O4134")
 
 def print_acceleration():
@@ -28,16 +29,20 @@ def print_acceleration():
 
     if difference["delta x"] < 0.5 and difference["delta y"] < 0.5 and difference["delta z"] < 0.5:
         print("YOU ARE THE BESTEST **********")
-    timer_collection.start_timer(5, youre_done)
+        timer_collection.stop(acceleration_monitor_timer)
+        timer_collection.start_timer(5, youre_done)
     previous_acceleration["x"] = acceleration["x"]
     previous_acceleration["y"] = acceleration["y"]
     previous_acceleration["z"] = acceleration["z"]
 
-timer_collection.start_periodic_timer(0.2, blink_led)
-timer_collection.start_periodic_timer(2, print_acceleration)
+blink_led_timer = timer_collection.start_periodic_timer(0.2, blink_led)
+acceleration_monitor_timer = timer_collection.start_periodic_timer(2, print_acceleration)
 
 while True:
     time_until_next = timer_collection.run()
+
+    if cp.button_a:
+        acceleration_monitor_timer = timer_collection.start_periodic_timer(2, print_acceleration)
 
     if time_until_next != None:
         time.sleep(time_until_next)
