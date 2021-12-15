@@ -1,62 +1,45 @@
+from adafruit_circuitplayground import cp
 import time
-import sys
+from timer_collection import TimerCollection
 
+cp.pixels.brightness = 0.01
 
-class TimerCollection(object):
+previous_acceleration = {"x": cp.acceleration.x, "y": cp.acceleration.y, "z": cp.acceleration.z}
+acceleration = {"x": cp.acceleration.x, "y": cp.acceleration.y, "z": cp.acceleration.z}
+difference = {"delta x": 0, "delta y": 0, "delta z": 0}
 
-    class Timer(object):
-        def __init__(self, interval, fn, argument = None, periodic = False):
-            self._start_time = time.monotonic()
-            self._interval = interval
-            self._fn = fn
-            self._argument = argument
-            self._periodic = periodic
+timer_collection = TimerCollection()
 
-        @property
-        def remaining_ticks(self):
-            elapsed_time = time.monotonic() - self._start_time
-            remaining_ticks = self._interval - elapsed_time
-            return remaining_ticks if remaining_ticks >= 0 else 0
+def blink_led():
+    cp.red_led = not cp.red_led
 
-    def __init__(self):
-        self.timers = []
-        self.last_ticks = time.monotonic()
+def youre_done():
+    print("YOU ARE DONE 1347183O4134")
 
-    def _add_timer(self, interval, fn, argument = None, periodic = False):
-        timer = self.Timer(interval, fn, argument, periodic)
-        self.timers.append(timer)
-        return timer
+def print_acceleration():
+    acceleration = {"x": cp.acceleration.x, "y": cp.acceleration.y, "z": cp.acceleration.z}
+    difference["delta x"] = abs(acceleration["x"] - previous_acceleration["x"])
+    difference["delta y"] = abs(acceleration["y"] - previous_acceleration["y"])
+    difference["delta z"] = abs(acceleration["z"] - previous_acceleration["z"])
 
-    def start_timer(self, interval, fn, argument = None):
-        return self._add_timer(interval, fn, argument)
+    print("current ", acceleration) 
+    print("previous", previous_acceleration)
+    print("difference", difference)
 
-    def start_periodic_timer(self, interval, fn, argument = None):
-        return self._add_timer(interval, fn, argument, periodic = True)
+    if difference["delta x"] < 0.5 and difference["delta y"] < 0.5 and difference["delta z"] < 0.5:
+        print("YOU ARE THE BESTEST **********")
+    timer_collection.start_timer(5, youre_done)
+    previous_acceleration["x"] = acceleration["x"]
+    previous_acceleration["y"] = acceleration["y"]
+    previous_acceleration["z"] = acceleration["z"]
 
-    def run(self):
-        timers_to_remove = []
+timer_collection.start_periodic_timer(0.2, blink_led)
+timer_collection.start_periodic_timer(2, print_acceleration)
 
-        next_ready = float('inf')
-        did_one = False
+while True:
+    time_until_next = timer_collection.run()
 
-        for timer in self.timers:
-            if not did_one and timer.remaining_ticks == 0:
-                did_one = True
-
-                if timer._argument != None:
-                    timer._fn(timer._argument)
-                else:
-                    timer._fn()
-
-                if not timer._periodic:
-                    timers_to_remove.append(timer)
-                else:
-                    timer._start_time = time.monotonic()
-                    next_ready = min(next_ready, timer.remaining_ticks)
-            else:
-                next_ready = min(next_ready, timer.remaining_ticks)
-
-        for timer in timers_to_remove:
-            self.timers.remove(timer)
-
-        return next_ready if next_ready != float('inf') else None
+    if time_until_next != None:
+        time.sleep(time_until_next)
+    else:
+        time.sleep(1)
