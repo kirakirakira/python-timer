@@ -14,7 +14,7 @@ def blink_led():
     cp.red_led = not cp.red_led
 
 def youre_done():
-    cp.play_file("short-alarm.wav")
+    cp.play_file("burp_x.wav")
     print("YOU ARE DONE 1347183O4134")
 
 def print_acceleration():
