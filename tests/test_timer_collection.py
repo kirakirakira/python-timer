@@ -221,7 +221,73 @@ class TestTimerCollection(unittest.TestCase):
         time_until_next = new_timer_collection.run()
         self.assertEqual(called_back[0], 3)
 
-    # TODO Stop timer
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_stop_periodic_timer_before_time_elapsed(self):
+        called_back = [0]
+
+        def callback():
+            called_back[0] += 1
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_periodic_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 1)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 2)
+
+        new_timer_collection.stop(timer)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 2)
+
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_stop_periodic_timer_during_elapsing_time(self):
+        called_back = [0]
+
+        def callback():
+            called_back[0] += 1
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_periodic_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 1)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 2)
+
+        timey.elapse(2)
+        new_timer_collection.stop(timer)
+
+        timey.elapse(3)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 2)
+        
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_stop_timer(self):
+        called_back = [0]
+
+        def callback():
+            called_back[0] += 1
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+
+        new_timer_collection.stop(timer)
+        
+        timey.elapse(3)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 0)
 
 if __name__ == '__main__':
     unittest.main()
