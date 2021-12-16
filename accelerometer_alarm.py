@@ -1,4 +1,4 @@
-from adafruit_circuitplayground import cp
+from lib.adafruit_circuitplayground import cp
 import time
 from timer_collection import TimerCollection
 

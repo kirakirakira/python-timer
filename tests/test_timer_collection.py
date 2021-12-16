@@ -240,7 +240,7 @@ class TestTimerCollection(unittest.TestCase):
         new_timer_collection.run()
         self.assertEqual(called_back[0], 2)
 
-        new_timer_collection.stop(timer)
+        timer.stop()
 
         timey.elapse(5)
         new_timer_collection.run()
@@ -266,7 +266,7 @@ class TestTimerCollection(unittest.TestCase):
         self.assertEqual(called_back[0], 2)
 
         timey.elapse(2)
-        new_timer_collection.stop(timer)
+        timer.stop()
 
         timey.elapse(3)
         new_timer_collection.run()
@@ -283,7 +283,7 @@ class TestTimerCollection(unittest.TestCase):
         timer = new_timer_collection.start_timer(5, callback)
         self.assertEqual(timer.remaining_ticks, 5)
 
-        new_timer_collection.stop(timer)
+        timer.stop()
         
         timey.elapse(3)
         new_timer_collection.run()
@@ -300,7 +300,7 @@ class TestTimerCollection(unittest.TestCase):
         timer = new_timer_collection.start_timer(5, callback)
         self.assertEqual(timer.remaining_ticks, 5)
 
-        new_timer_collection.stop(timer)
+        timer.stop()
         
         timey.elapse(3)
         new_timer_collection.run()
@@ -318,7 +318,7 @@ class TestTimerCollection(unittest.TestCase):
 
         def callback():
             called_back[0] += 1
-            new_timer_collection.stop(timer)
+            timer.stop()
 
         new_timer_collection = TimerCollection()
         timer = new_timer_collection.start_periodic_timer(5, callback)

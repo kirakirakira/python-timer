@@ -5,12 +5,13 @@ import sys
 class TimerCollection(object):
 
     class Timer(object):
-        def __init__(self, interval, fn, argument = None, periodic = False):
+        def __init__(self, timer_collection, interval, fn, argument = None, periodic = False):
             self._start_time = time.monotonic()
             self._interval = interval
             self._fn = fn
             self._argument = argument
             self._periodic = periodic
+            self._timer_collection = timer_collection
 
         @property
         def remaining_ticks(self):
@@ -18,12 +19,16 @@ class TimerCollection(object):
             remaining_ticks = self._interval - elapsed_time
             return remaining_ticks if remaining_ticks >= 0 else 0
 
+        def stop(self):
+            self._timer_collection.timers.remove(self)
+
+
     def __init__(self):
         self.timers = []
         self.last_ticks = time.monotonic()
 
     def _add_timer(self, interval, fn, argument = None, periodic = False):
-        timer = self.Timer(interval, fn, argument, periodic)
+        timer = self.Timer(self, interval, fn, argument, periodic)
         self.timers.append(timer)
         return timer
 
