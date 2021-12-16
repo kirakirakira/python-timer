@@ -289,5 +289,55 @@ class TestTimerCollection(unittest.TestCase):
         new_timer_collection.run()
         self.assertEqual(called_back[0], 0)
 
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_restart_stopped_timer(self):
+        called_back = [0]
+
+        def callback():
+            called_back[0] += 1
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+
+        new_timer_collection.stop(timer)
+        
+        timey.elapse(3)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 0)
+
+        timer = new_timer_collection.start_timer(5, callback)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 1)
+
+    @mock.patch('time.monotonic', timey.current_time)
+    def test_restart_periodic_timer(self):
+        called_back = [0]
+
+        def callback():
+            called_back[0] += 1
+            new_timer_collection.stop(timer)
+
+        new_timer_collection = TimerCollection()
+        timer = new_timer_collection.start_periodic_timer(5, callback)
+        self.assertEqual(timer.remaining_ticks, 5)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 1)
+
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 1)
+
+        timer = new_timer_collection.start_periodic_timer(5, callback)
+        
+        timey.elapse(5)
+        new_timer_collection.run()
+        self.assertEqual(called_back[0], 2)
+        
+
 if __name__ == '__main__':
     unittest.main()

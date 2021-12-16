@@ -20,6 +20,7 @@ def youre_done():
     print("YOU ARE DONE 1347183O4134")
 
 def print_acceleration():
+    button_pressed = 0
     acceleration = {"x": cp.acceleration.x, "y": cp.acceleration.y, "z": cp.acceleration.z}
     difference["delta x"] = abs(acceleration["x"] - previous_acceleration["x"])
     difference["delta y"] = abs(acceleration["y"] - previous_acceleration["y"])
@@ -33,7 +34,7 @@ def print_acceleration():
         print("YOU ARE THE BESTEST **********")
         print(acceleration_monitor_timer[0])
         timer_collection.stop(acceleration_monitor_timer[0])
-        timer_collection.start_timer(5, youre_done)
+        # timer_collection.start_timer(5, youre_done)
     previous_acceleration["x"] = acceleration["x"]
     previous_acceleration["y"] = acceleration["y"]
     previous_acceleration["z"] = acceleration["z"]
@@ -41,11 +42,19 @@ def print_acceleration():
 blink_led_timer = timer_collection.start_periodic_timer(0.2, blink_led)
 acceleration_monitor_timer[0] = timer_collection.start_periodic_timer(2, print_acceleration)
 
+button_pressed = 0
+
 while True:
     time_until_next = timer_collection.run()
 
     if cp.button_a:
-        acceleration_monitor_timer[0] = timer_collection.start_periodic_timer(2, print_acceleration)
+        print("BUTTON A IS PRESSED =======")
+        button_pressed += 1
+        print(button_pressed)
+        
+        if button_pressed == 1:
+            print("A BUTTON TIMER STARTED")
+            acceleration_monitor_timer[0] = timer_collection.start_periodic_timer(2, print_acceleration)
 
     if time_until_next != None:
         time.sleep(time_until_next)
