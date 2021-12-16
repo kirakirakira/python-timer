@@ -1,4 +1,4 @@
-from lib.adafruit_circuitplayground import cp
+from adafruit_circuitplayground import cp
 import time
 from timer_collection import TimerCollection
 
@@ -42,7 +42,7 @@ def print_acceleration():
         debounce[0] = 0
 
     if debounce[0] >= 5:
-        timer_collection.stop(acceleration_monitor_timer[0])
+        acceleration_monitor_timer[0].stop()
         timer_collection.start_timer(5, youre_done)
 
     previous_acceleration["x"] = acceleration["x"]
