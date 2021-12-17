@@ -26,4 +26,10 @@ If there is time until the next timer is due to expire, then we'll sleep that am
 
 Inside the timer collection's `run` method, it figures out which timer is due to expire next by checking the remaining time (ticks) for all of the timers in the list. If there is no remaining time left for a timer, it will also run the callback function that was passed in when the timer was added.
 
+This non-blocking timer collection allows multiple timers to be created and executing their callbacks at different times without blocking (i.e. waiting and stopping for it) the execution of another timer. This allows for more complex hardware applications with multiple timers and events.
+
 ##### Acceleration monitor with alarm application
+
+The non-blocking timer implementation is used in an application where the acceleration can be monitored on the top of a washing machine, and once the change in acceleration slows down, it'll sound an alarm to let you know that the cycle is complete.
+
+The code is `accelerometer_alarm.py`.
