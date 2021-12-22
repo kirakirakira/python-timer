@@ -8,7 +8,7 @@ CircuitPython operates on a single thread meaning it can only do 1 action at onc
 
 But if you want to be able to do multiple things "at once", you need a way to not block execution of other tasks that need to go. A non-blocking timer implementation allows you to keep track of multiple events that need to happen, when they need to happen and what to do when their time is up.
 
-The solution to this problem is in `timer_collection.py` and tests in `test_timer_collection.py`. This module was written using TDD, where the tests were written first, then the code.
+The solution to this problem is in `timer_collection.py` and tests in `test_timer_collection.py`. This module was written using TDD, where the tests were written first, then the code. A mock was used for Python's `time` module to simulate time elapsing and the current time.
 
 The timer collection is a class. When initialized, it holds an empty list of `Timer` objects. It also records the `last_ticks` as the current time from `time.monotonic()`. A one-shot or periodic timer can be started in this collection and a callback function to be executed when the timer expires included, and it'll be added to the list of timers. Once a timer is created, you need to run the timer collection in order for time to pass. The timer collection's `run` method returns the time until the next timer is due to expire. Thus you can do this in the `while True:` loop:
 
