@@ -1,4 +1,4 @@
-# Non-blocking timer using CircuitPython and Accelerometer Alarm Application
+# Non-blocking timer in CircuitPython and Accelerometer Alarm Application
 #### Video Demo:  <URL HERE>
 #### Description:
 This accelerometer alarm uses CircuitPython and the Circuit Playground Bluefruit's on board accelerometer to monitor for changes in acceleration. Once the change in acceleration in x, y, and z directions no longer changes more than 0.5 m/s^2 for X number of debounce times (set to 5 in code currently), then it will delay for X seconds (set to 5 in the code currently). Once the X seconds delay is complete, it will sound an alarm (burp in this case) that the monitoring is complete. The acceleration monitoring can be restarted by pressing the A button that is also on board the Circuit Playground Bluefruit.
