@@ -1,4 +1,4 @@
-# Accelerometer alarm with non-blocking timer using CircuitPython
+# Non-blocking timer using CircuitPython and Accelerometer Alarm Application
 #### Video Demo:  <URL HERE>
 #### Description:
 This accelerometer alarm uses CircuitPython and the Circuit Playground Bluefruit's on board accelerometer to monitor for changes in acceleration. Once the change in acceleration in x, y, and z directions no longer changes more than 0.5 m/s^2 for X number of debounce times (set to 5 in code currently), then it will delay for X seconds (set to 5 in the code currently). Once the X seconds delay is complete, it will sound an alarm (burp in this case) that the monitoring is complete. The acceleration monitoring can be restarted by pressing the A button that is also on board the Circuit Playground Bluefruit.
@@ -29,7 +29,9 @@ Inside the timer collection's `run` method, it figures out which timer is due to
 This non-blocking timer collection allows multiple timers to be created and executing their callbacks at different times without blocking (i.e. waiting and stopping for it) the execution of another timer. This allows for more complex hardware applications with multiple timers and events.
 
 ##### Acceleration monitor with alarm application
-
 The non-blocking timer implementation is used in an application where the acceleration can be monitored on the top of a washing machine, and once the change in acceleration slows down, it'll sound an alarm to let you know that the cycle is complete.
 
 The code is `accelerometer_alarm.py`. It initializes a heartbeat LED (to let you know that the board's application code is running) and the periodic timer that monitors the acceleration. Every time the periodic timer's callback is called, it compares the previous acceleration in x, y, and z with the current acceleration in x, y, and z, calculates the difference, and if the absolute value of the difference between these two acceleration vectors is less than some threshold (set to 0.5 m/s^2), then the debounce count is incremented. The difference must be debounced X times (set to 5) before the cycle is deemed complete. This ensures that there are the acceleration value is consistent with no large spikes. Once the debounce time has completed, then a delay timer is started (a one-shot timer for X seconds, set to 5), then the alarm will sound (in this case a burp sound) indicating that the cycle is complete.
+
+##### Other examples
+Other example uses of the non-blocking timer can be found in the `/examples` folder. `blinker.py` blinks the Neopixel LEDs on the Bluefruit at various rates. `pedometer.py` is a rudimentary (and not at all accurate) pedometer step counter that monitors the acceleration and once it matches a certain pattern, records a step taken.
