@@ -6,7 +6,7 @@ This accelerometer alarm uses CircuitPython and the Circuit Playground Bluefruit
 ##### Non-blocking timer
 CircuitPython operates on a single thread meaning it can only do 1 action at once. Doing multiple things has to be done one after the other, but if you need to wait for something to happen (event) to trigger another action (callback), then you need a way to do this. Python and CircuitPython have a `time` module `sleep` function that delays execution of the next task by some number of seconds. While it's delaying execution, nothing can happen during this time. All execution is stopped. This is called a blocking timer.
 
-But if you want to be able to do multiple things "at once", you need a way to not block execution of other tasks that need to go. A non-blocking timer implementation allows you to keep track of multiple events that need to happen, when they need to happen and what to do when their time is up.
+But if you want to be able to do multiple things "at once", you need a way to not block execution of other tasks that need to happen. A non-blocking timer implementation allows you to keep track of multiple events that need to happen, when they need to happen and what to do when their time is up.
 
 The solution to this problem is in `timer_collection.py` and tests in `test_timer_collection.py`. This module was written using TDD, where the tests were written first, then the code. A mock was used for Python's `time` module to simulate time elapsing and the current time. A Makefile was also created for ease of use in running the tests. Tests can be run by running `make run_tests`.
 
